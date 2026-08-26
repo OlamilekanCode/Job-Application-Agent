@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+dist/
+build/
+*.egg-info/
+job-application-agent/data/
+job-application-agent/.env
+job-application-agent/.coverage
+job-application-agent/htmlcov/
+
