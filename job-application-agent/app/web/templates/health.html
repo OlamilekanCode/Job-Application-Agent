@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1>System Health</h1>
+  <p>Local-only preflight checks for the Phase 1 foundation.</p>
+</section>
+
+<section class="panel">
+  <h2>Overall: {{ health.overall }}</h2>
+  <div class="health-grid">
+    {% for name, item in health.items() %}
+      {% if name != "overall" %}
+        <article class="health-item">
+          <h3>{{ name }}</h3>
+          {% if item is mapping %}
+            <dl>
+              {% for key, value in item.items() %}
+                <div><dt>{{ key }}</dt><dd>{{ value }}</dd></div>
+              {% endfor %}
+            </dl>
+          {% else %}
+            <p>{{ item }}</p>
+          {% endif %}
+        </article>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+

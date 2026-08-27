@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1>Candidate Profile</h1>
+  <p>Minimal Phase 1 profile and fact memory editor.</p>
+</section>
+
+<section class="panel">
+  <h2>Profile</h2>
+  <form method="post" action="/profile" class="form-grid">
+    <label>Full name <input name="full_name" value="{{ profile.full_name if profile else '' }}"></label>
+    <label>Email <input name="email" value="{{ profile.email if profile else '' }}"></label>
+    <label>Phone <input name="phone" value="{{ profile.phone if profile else '' }}"></label>
+    <label>Location <input name="location" value="{{ profile.location if profile else 'Nigeria' }}"></label>
+    <label class="wide">Headline <input name="headline" value="{{ profile.headline if profile else '' }}"></label>
+    <button type="submit">Save Profile</button>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Add Fact</h2>
+  <form method="post" action="/facts" class="form-grid">
+    <label>Category <input name="category" required placeholder="skill"></label>
+    <label>Field <input name="field_name" required placeholder="python"></label>
+    <label class="wide">Value <textarea name="human_value" required></textarea></label>
+    <label>Source <input name="source" required placeholder="user"></label>
+    <label>Status
+      <select name="confirmation_state">
+        <option value="proposed">proposed</option>
+        <option value="confirmed">confirmed</option>
+      </select>
+    </label>
+    <label>Sensitivity
+      <select name="sensitivity">
+        <option value="normal">normal</option>
+        <option value="sensitive">sensitive</option>
+        <option value="legal">legal</option>
+      </select>
+    </label>
+    <button type="submit">Add Fact</button>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Facts</h2>
+  <table>
+    <thead><tr><th>Fact</th><th>Value</th><th>Source</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for fact in facts %}
+        <tr class="{{ 'disabled' if fact.disabled_at else '' }}">
+          <td>{{ fact.category }}.{{ fact.field_name }}</td>
+          <td>{{ fact.human_value }}</td>
+          <td>{{ fact.source }}</td>
+          <td>{{ fact.confirmation_state }}</td>
+          <td class="actions">
+            {% if fact.confirmation_state != 'confirmed' and not fact.disabled_at %}
+              <form method="post" action="/facts/{{ fact.id }}/confirm"><button>Confirm</button></form>
+            {% endif %}
+            {% if not fact.disabled_at %}
+              <form method="post" action="/facts/{{ fact.id }}/disable"><button>Disable</button></form>
+            {% endif %}
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5">No facts yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+

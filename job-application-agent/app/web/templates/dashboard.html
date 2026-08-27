@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1>Phase 1 Foundation</h1>
+  <p>Local dashboard shell, persistence, worker queue, health checks, and sample data.</p>
+</section>
+
+<section class="grid">
+  <article class="panel">
+    <h2>Task Queue</h2>
+    {% if task_summary %}
+      <dl class="metrics">
+        {% for status, count in task_summary.items() %}
+          <div><dt>{{ status }}</dt><dd>{{ count }}</dd></div>
+        {% endfor %}
+      </dl>
+    {% else %}
+      <p>No queued tasks yet.</p>
+    {% endif %}
+  </article>
+  <article class="panel">
+    <h2>Recent Facts</h2>
+    {% for fact in facts %}
+      <p><strong>{{ fact.category }}.{{ fact.field_name }}</strong><br>{{ fact.human_value }}</p>
+    {% else %}
+      <p>No candidate facts yet.</p>
+    {% endfor %}
+  </article>
+</section>
+
+<section class="panel">
+  <h2>Sample Jobs</h2>
+  <table>
+    <thead><tr><th>Company</th><th>Title</th><th>Status</th><th>Remote</th></tr></thead>
+    <tbody>
+      {% for job in jobs %}
+        <tr>
+          <td>{{ job.company }}</td>
+          <td>{{ job.title }}</td>
+          <td><span class="badge">{{ job.status }}</span></td>
+          <td>{{ job.remote_policy }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="4">Run the seed command to add the Phase 1 sample job.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="panel">
+  <h2>Recent Audit Events</h2>
+  {% for event in events %}
+    <p><strong>{{ event.event_type }}</strong> <span class="muted">{{ event.created_at }}</span></p>
+  {% else %}
+    <p>No audit events recorded yet.</p>
+  {% endfor %}
+</section>
+{% endblock %}
+

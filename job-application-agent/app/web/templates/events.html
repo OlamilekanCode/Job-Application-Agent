@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1>Audit Events</h1>
+  <p>Append-only operational events for Phase 1 decisions and task activity.</p>
+</section>
+
+<section class="panel">
+  <table>
+    <thead><tr><th>Time</th><th>Event</th><th>Actor</th><th>Subject</th><th>Severity</th></tr></thead>
+    <tbody>
+      {% for event in events %}
+        <tr>
+          <td>{{ event.created_at }}</td>
+          <td>{{ event.event_type }}</td>
+          <td>{{ event.actor }}</td>
+          <td>{{ event.subject_type }} {{ event.subject_id }}</td>
+          <td>{{ event.severity }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5">No audit events yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+

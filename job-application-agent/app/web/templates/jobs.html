@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-heading">
+  <h1>Jobs</h1>
+  <p>Phase 1 shows one synthetic sample job only. Real discovery starts later.</p>
+</section>
+
+{% for job in jobs %}
+  <section class="panel">
+    <h2>{{ job.title }}</h2>
+    <p><strong>{{ job.company }}</strong> · {{ job.location }} · {{ job.remote_policy }}</p>
+    <p>Status: <span class="badge">{{ job.status }}</span></p>
+    {% set score = scores_by_job[job.id] %}
+    {% if score %}
+      <p>Score: <strong>{{ score.total_score }}</strong></p>
+      <p>{{ score.explanation }}</p>
+    {% endif %}
+    <h3>Evidence</h3>
+    {% for evidence in evidence_by_job[job.id] %}
+      <p><strong>{{ evidence.category }}</strong>: {{ evidence.evidence_text }}</p>
+    {% else %}
+      <p>No evidence captured.</p>
+    {% endfor %}
+  </section>
+{% else %}
+  <section class="panel"><p>No jobs yet. Run the seed command.</p></section>
+{% endfor %}
+{% endblock %}
+
